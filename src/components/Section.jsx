@@ -1,18 +1,23 @@
 import Input from './Input';
 
-export function ContactSection(){
+
+function handleChange(e){
+     e.target.value = e.target.textContent;
+}
+
+export function ContactSection({isActive, contacts}){
     return(
-    <section className="contacts">
+    <fieldset className="contacts">
 
         <h2>Contact Information</h2>
-        <Input label="Name" />
-        <Input label="Email address" type="email" />
-        <Input label="Phone Number" type="tel" />
+        <Input label="Name" defaultValue={contacts.name} readOnly={!(isActive==="contactSection")}  />
+        <Input label="Email address" type="email" defaultValue={contacts.email} readOnly={!(isActive==="contactSection")} />
+        <Input label="Phone Number" type="tel" defaultValue={contacts.phone} readOnly={!(isActive==="contactSection")} />
         <button>
-            Edit
+            {isActive==="contactSection"? "Save": "Edit"}
         </button>
 
-    </section>
+    </fieldset>
     )
 }
 
@@ -33,7 +38,7 @@ export function EducationItem({schoolName='', subject='', startDate='', endDate=
 
 export function Education(){
     return(
-        <section className='education'>
+        <fieldset className='education'>
 
             <h2>Education</h2>
             <EducationItem />
@@ -43,7 +48,7 @@ export function Education(){
             <button>
                 Edit
             </button>
-        </section>
+        </fieldset>
     )
 }
 
@@ -62,11 +67,11 @@ export function JobItem({companyName= '', position='', description='', startDate
 }
 
 
-export function WorkExperience(){
+export function JobExperience(){
 
     return(
-        <section className="workExperience">
-            <h2>Work Experience</h2>
+        <fieldset className="job-experience">
+            <h2>Job Experience</h2>
             <JobItem />
             <button>
                 Add a job
@@ -75,6 +80,6 @@ export function WorkExperience(){
                 Edit
             </button>
 
-        </section>
+        </fieldset>
     );
 }

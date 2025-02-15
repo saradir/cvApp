@@ -3,14 +3,21 @@ import {ContactSection, Education, JobExperience} from './components/Section'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isActive, setIsActive] = useState('contactSection');
+  const [contactInfo, setContactInfo] = useState({
+    name: "sampl",
+    email: "",
+    phone: ""
+  })
 
   return (
-    <>
-      <ContactSection />
+    <form>
+      <ContactSection 
+        isActive={isActive} 
+        contacts={contactInfo} />
       <Education />
       <JobExperience />
-    </>
+    </form>
   )
 }
 

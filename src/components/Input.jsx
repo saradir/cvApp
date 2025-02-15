@@ -1,10 +1,10 @@
-export default function Input({ label, type = '', value = '' }) {
+export default function Input({ label, type = '', defaultValue = '', readOnly }) {
     
     return (
       <label>
         {label}:
         {' '}
-        <input type={type} value={value}
+        <input type={type} defaultValue={defaultValue} readOnly={readOnly}
 
         />
       </label>
