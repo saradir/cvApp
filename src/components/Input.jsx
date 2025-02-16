@@ -1,10 +1,10 @@
-export default function Input({ label, type = '', defaultValue = '', readOnly }) {
+export default function Input({ label, name, type = '', value = '', disabled, onChange }) {
     
     return (
       <label>
         {label}:
         {' '}
-        <input type={type} defaultValue={defaultValue} readOnly={readOnly}
+        <input name={name} type={type} value={value} disabled={disabled} onChange={onChange}
 
         />
       </label>
