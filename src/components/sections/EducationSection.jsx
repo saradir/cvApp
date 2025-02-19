@@ -4,9 +4,12 @@ import Input from '../shared/Input.jsx';
 import useEditableSection from '../shared/useEditableSection';
 import SaveEditButton from '../shared/SaveEditButton.jsx';
 
+//css
+import globalStyles from '../../styles/Global.module.css';
+
 const EducationItem = memo(function EducationItem({id, schoolName='', subject='', startDate='', endDate='', isEditing, handleChange, handleRemove}){        
     return(
-        <div className='EducationItem' id={id}>
+        <div className={globalStyles.item} id={id}>
             <Input label="School" name='school' value={schoolName} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)}  />
             <Input label="Subject" name='subject' value={subject} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)} />
             <Input label="Start" type="date" name='start' value={startDate} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)}/>
@@ -26,7 +29,7 @@ export function EducationSection({educationItems, setEducationItems}){
     return(
         <fieldset className='education'>
             <h2>Education</h2>
-            <div className='education-items'>
+            <div className={globalStyles.inputGroup}>
                 {tempData.map( item => (
                     <EducationItem
                         key={item.id}
@@ -41,10 +44,12 @@ export function EducationSection({educationItems, setEducationItems}){
                 ))}
 
             </div>
-            <button type='button' onClick={handleAdd}>
-                Add education
-            </button>
-            <SaveEditButton isEditing={isEditing} handleClick={handleClick} />
+            <div className={globalStyles.buttonGroup}>
+                <button type='button' disabled={!(isEditing)} onClick={handleAdd}>
+                    Add education
+                </button>
+                <SaveEditButton isEditing={isEditing} handleClick={handleClick} />
+            </div>
         </fieldset>
     )
 }

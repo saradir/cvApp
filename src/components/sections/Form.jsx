@@ -10,6 +10,8 @@ import {v4 as uuidv4} from 'uuid';
 
 export function Form(){
 
+    const[mode, setMode] = useState('input');
+
     const [contactInfo, setContactInfo] = useState([
         {
         id: uuidv4(),
@@ -41,10 +43,12 @@ export function Form(){
         }
         ]);
     return (
-        <form>
+        <form onSubmit={(e) => {e.preventDefault(); setMode('display')}}>
+            <h1>CV Form</h1>
             <ContactSection 
                 contacts={contactInfo}
                 setContactInfo={setContactInfo}
+                mode={mode}
                 />
             <EducationSection
             educationItems={educationItems}
@@ -53,6 +57,7 @@ export function Form(){
                 jobItems={jobItems}
                 setJobItems={setJobItems}
             />
+            <button type="submit">Submit</button>
         </form>
     )
 }

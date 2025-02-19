@@ -37,7 +37,7 @@ export default function useEditableSection(initialData, setGlobalData){
     }, []);
 
     const  handleRemove = (id) =>{
-        setGlobalData(prevData => prevData.filter(item => item.id !== id));
+        setTempData(prevData => prevData.filter(item => item.id !== id));
         console.log("Removed item with id: ", id);
     }
 

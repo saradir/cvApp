@@ -3,14 +3,26 @@ import  {  memo } from 'react';
 import Input from '../shared/Input.jsx';
 import useEditableSection from '../shared/useEditableSection';
 import SaveEditButton from '../shared/SaveEditButton.jsx';
+import globalStyles from '../../styles/Global.module.css';
 
-
-const JobItem = memo(function JobItem({id, jobName='', startDate='', endDate='',jobDescription='', isEditing, handleChange, handleRemove}){
+const JobItem = memo(function JobItem({id, jobName='', startDate='', endDate='',jobDescription='', isEditing, handleChange, handleRemove, mode='input'}){
+    if(mode === 'display'){
+        return(
+            <div className={globalStyles.item} id={id}>
+                <p>Job: {jobName}</p>
+                <p>Start: {startDate}</p>
+                <p>End: {endDate}</p>
+                <p>Description: {jobDescription}</p>
+            </div>
+        );
+    }
     return(
-        <div className='JobItem' id={id}>
-            <Input label="Job" name='job' value={jobName} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)}  />
-            <Input label="Start" type="date" name='start' value={startDate} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)}/>
-            <Input label="End" type="date" name='end' value={endDate} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)} />
+        <div className={globalStyles.item} id={id}>
+            
+                <Input label="Job" name='job' value={jobName} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)}  />
+                <Input label="Start" type="date" name='start' value={startDate} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)}/>
+                <Input label="End" type="date" name='end' value={endDate} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)} />
+            
             <label>
                 Description:
                 <textarea id="jobDescription" name="jobDescription" value={jobDescription} rows="5" cols="50" disabled={!(isEditing)} onChange={(e) => handleChange(e,id)}>
@@ -20,7 +32,7 @@ const JobItem = memo(function JobItem({id, jobName='', startDate='', endDate='',
 
             <button type="button" onClick={() => handleRemove(id)} disabled={!(isEditing)}>
                 Remove
-            </button>
+            </button>)
 
             
         </div>
@@ -35,7 +47,8 @@ export function JobSection({jobItems, setJobItems}){
         <fieldset className='job-section'>
             <h2>Work Experience</h2>
             <div className='job-items'>
-                {tempData.map( item => (
+                {tempData.map( (item) => (
+                    
                     <JobItem 
                         key={item.id}
                         id={item.id}
@@ -45,13 +58,16 @@ export function JobSection({jobItems, setJobItems}){
                         isEditing={isEditing}
                         handleChange={handleChange}
                         handleRemove={handleRemove}/>
-
+                    
                 ))}
             </div>
-            <button type='button' onClick={handleAdd}>
-                Add Job
-            </button>
-            <SaveEditButton isEditing={isEditing} handleClick={handleClick} />
+
+            <div className={globalStyles.buttonGroup}>
+                <button type='button' disabled={!(isEditing)} onClick={handleAdd}>
+                    Add Job
+                </button>
+                <SaveEditButton isEditing={isEditing} handleClick={handleClick} />
+            </div>
         </fieldset>
     )
 }

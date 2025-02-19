@@ -1,0 +1,23 @@
+ .item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    gap:10px;
+    padding:5px;
+}
+
+.buttonGroup{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+button{
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 200px;
+}
