@@ -1,13 +1,20 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
-import Input from './Input';
+import { useState, useCallback, memo } from 'react';
+import Input from './shared/Input';
 import PropTypes from 'prop-types';
-import {v4 as uuidv4} from 'uuid';
 
-
+function SaveEditButton({isEditing, handleClick}){
+    return(
+        <button type="button" className={isEditing? "save-button": "edit-button"} onClick={handleClick}>
+        {isEditing? "Save": "Edit"}
+        </button>
+    )
+}
 
 function useEditableSection(initialData, setGlobalData){
-    const [tempData, setTempData] = useState([initialData.map(item => ({...item}))]);
+    console.log(typeof initialData, initialData);
+
+    const [tempData, setTempData] = useState(initialData.map(item => ({...item})));
     const [isEditing, setEditing] = useState(false);
 
     function handleClick(){
@@ -18,13 +25,14 @@ function useEditableSection(initialData, setGlobalData){
             ]);
             setEditing(false);            
         }else{
-            setTempData([initialData.map(item => ({...item}))]);
+            setTempData(initialData.map(item => ({...item})));
             setEditing(true);
         }
     }
 
-    function handleChange(e, id) {
-        setTempData(tempData.map((item) =>
+    const handleChange = useCallback((e, id) => {
+        setTempData(prevData => 
+            prevData.map((item) =>
             item.id === id ?
             {
             ...item,
@@ -32,41 +40,15 @@ function useEditableSection(initialData, setGlobalData){
             }
             :item)
         )
-    }
+    }, []);
 
     return { tempData, isEditing, handleClick, handleChange}
 }
+
 export function ContactSection({contacts, setContactInfo}){
-
+    console.log("ContactSection re-rendered") 
     const { tempData, isEditing, handleClick, handleChange} = useEditableSection(contacts,setContactInfo);
-  
-
-    /*
-    function handleClick(){
-        console.log('handling click');
-        // save
-        if(isEditing){
-            setContactInfo({
-                ...tempContacts
-            });
-            setEditing('');
-            console.log(`saved ${tempContacts}`);
-            
-        }else{
-            setTempContacts({...contacts});
-            setEditing("contactSection");
-
-        }
-    }
-    function handleChange(e) {
-        setTempContacts({
-            ...tempContacts,
-            [e.target.name]: e.target.value
-        })
-    }
-
-    */
-    
+      
     return(
     <fieldset className="contacts">
         <div className='contactInformation'>
@@ -77,79 +59,61 @@ export function ContactSection({contacts, setContactInfo}){
                     <Input label="Email address" name="email" type="email" value={item.email} disabled={!(isEditing)} onChange={(e) => handleChange(e,item.id)} />
                     <Input label="Phone Number" name="phone" type="tel" value={item.phone} disabled={!(isEditing)} onChange={(e) => handleChange(e,item.id)} />
                 </div>
-))};
+            ))}
         </div>
 
-        <button type="button" className={isEditing? "save-button": "edit-button"} onClick={handleClick}>
-            {isEditing? "Save": "Edit"}
-        </button>
+        <SaveEditButton isEditing={isEditing} handleClick={handleClick} />
     </fieldset>
     )
 }
 
-
-export function EducationItem({schoolName='', subject='', startDate='', endDate=''}){
+const EducationItem = memo(function EducationItem({id, schoolName='', subject='', startDate='', endDate='', isEditing, handleChange}){        
     return(
-
-        <div className='EducationItem'>
-            <Input label="School" />
-            <Input label="Subject" />
-            <Input label="Start" type="date"/>
-            <Input label="End" type="date" />
-
+        <div className='EducationItem' id={id}>
+            <Input label="School" name='school' value={schoolName} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)}  />
+            <Input label="Subject" name='subject' value={subject} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)} />
+            <Input label="Start" type="date" name='start' value={startDate} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)}/>
+            <Input label="End" type="date" name='end' value={endDate} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)} />
         </div>
     );
-}
+});
 
-
-export function Education(educationItems, setEducationItems){
-
-    //const [tempEducation, isEditing, handleClick, handleChange] = useEditableSection(educationItems,setEducationItems);
+export function EducationSection({educationItems, setEducationItems}){
+    const {tempData, isEditing, handleClick, handleChange} = useEditableSection(educationItems,setEducationItems);
+    console.log("EducationSection re-rendered") 
 
     return(
         <fieldset className='education'>
-
             <h2>Education</h2>
-
-            <EducationItem />
+            <div className='education-items'>
+                {tempData.map( item => (
+                    <EducationItem key={item.id} id={item.id} schoolName={item.school} subject={item.subject} startDate={item.start} endDate={item.end} isEditing={isEditing} handleChange={handleChange} />
+                ))}
+            </div>
             <button>
                 Add education
             </button>
-            <button>
-                Edit
-            </button>
+            <SaveEditButton isEditing={isEditing} handleClick={handleClick} />
         </fieldset>
     )
 }
 
-
-export function JobItem({companyName= '', position='', description='', startDate ='', endDate=''}){
-    return(
-        <div className="JobItem">
-            <Input label="Company name" />
-            <Input label="Position title" />
-            <Input label="Job Description" />
-            <Input label="Start" type="date" />
-            <Input label="End" type="date" />
-
-        </div>
-    );
-}
-
-
-export function JobExperience(){
+export function JobSection({jobItems, setJobItems}){
+    const {tempData, isEditing, handleClick, handleChange} = useEditableSection(jobItems,setJobItems);
+    console.log("JobSection re-rendered") 
 
     return(
-        <fieldset className="job-experience">
-            <h2>Job Experience</h2>
-            <JobItem />
+        <fieldset className='job-section'>
+            <h2>Skills</h2>
+            <div className='job-items'>
+                {tempData.map( item => (
+                    <Input key={item.id} label="Skill" name="job" value={item.skill} disabled={!(isEditing)} onChange={(e) => handleChange(e,item.id)} />
+                ))}
+            </div>
             <button>
-                Add a job
+                Add skill
             </button>
-            <button>
-                Edit
-            </button>
-
+            <SaveEditButton isEditing={isEditing} handleClick={handleClick} />
         </fieldset>
-    );
+    )
 }
