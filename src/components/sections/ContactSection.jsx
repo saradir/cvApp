@@ -10,13 +10,13 @@ export function ContactSection({contacts, setContactInfo, mode}){
       
     if(mode==='display'){
         return(
-            <div className="contactInformation">
+            <div className={[globalStyles.contactInformation, globalStyles.display].join(' ')}>
                 <h2>Contact Information</h2>
                 {tempData.map(item => (
-                    <div className={globalStyles.item} key={item.id}>
-                        <p>Name: {item.name}</p>
-                        <p>Email: {item.email}</p>
-                        <p>Phone: {item.phone}</p>
+                    <div className={[globalStyles.item, globalStyles.display]} key={item.id}>
+                        <p><span className={globalStyles.label}>Name:</span> {item.name}</p>
+                        <p><span className={globalStyles.label}>Email:</span> {item.email}</p>
+                        <p><span className={globalStyles.label}>Phone:</span> {item.phone}</p>
                     </div>
                 ))}
             </div>

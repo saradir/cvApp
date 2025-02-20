@@ -35,8 +35,8 @@ export function Form(){
         {
             id: uuidv4(),
             companyName: '',
-            jobTitle: '',
-            roleDescription: '',
+            jobName: '',
+            jobDescription: '',
             startDate: '', 
             endDate: ''
 
@@ -52,12 +52,16 @@ export function Form(){
                 />
             <EducationSection
             educationItems={educationItems}
-            setEducationItems={setEducationItems} />
+            setEducationItems={setEducationItems} 
+            mode={mode} />
             <JobSection
                 jobItems={jobItems}
                 setJobItems={setJobItems}
+                mode={mode}
             />
-            <button type="submit">Submit</button>
+            {mode === 'input' && <button type="submit">Submit</button>}
+            {mode === 'display' && <button onClick={() => setMode('input')}>Edit</button>}
+            
         </form>
     )
 }

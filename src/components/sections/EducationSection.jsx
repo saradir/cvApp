@@ -7,7 +7,8 @@ import SaveEditButton from '../shared/SaveEditButton.jsx';
 //css
 import globalStyles from '../../styles/Global.module.css';
 
-const EducationItem = memo(function EducationItem({id, schoolName='', subject='', startDate='', endDate='', isEditing, handleChange, handleRemove}){        
+const EducationItem = memo(function EducationItem({id, schoolName='', subject='', startDate='', endDate='', isEditing, handleChange, handleRemove, mode='display'}){        
+       
     return(
         <div className={globalStyles.item} id={id}>
             <Input label="School" name='school' value={schoolName} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)}  />
@@ -22,10 +23,25 @@ const EducationItem = memo(function EducationItem({id, schoolName='', subject=''
     );
 });
 
-export function EducationSection({educationItems, setEducationItems}){
+export function EducationSection({educationItems, setEducationItems, mode='input'}){
     const {tempData, isEditing, handleClick, handleChange, handleRemove, handleAdd} = useEditableSection(educationItems,setEducationItems);
     console.log("EducationSection re-rendered") 
 
+    if(mode === 'display'){
+        return(
+            <div className={[globalStyles.education, globalStyles.display].join(' ')}>
+                <h2>Education</h2>
+                {tempData.map(item => (
+                    <div className={[globalStyles.item, globalStyles.display].join(' ')} key={item.id}>
+                        <p><span className={globalStyles.label}>School:</span> {item.school}</p>
+                        <p><span className={globalStyles.label}>Subject:</span> {item.subject}</p>
+                        <p><span className={globalStyles.label}>Start:</span> {item.start}</p>
+                        <p><span className={globalStyles.label}>End:</span> {item.end}</p>
+                    </div>
+                ))}
+            </div>
+        )
+    }
     return(
         <fieldset className='education'>
             <h2>Education</h2>

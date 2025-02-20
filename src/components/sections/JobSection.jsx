@@ -23,25 +23,40 @@ const JobItem = memo(function JobItem({id, jobName='', startDate='', endDate='',
                 <Input label="Start" type="date" name='start' value={startDate} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)}/>
                 <Input label="End" type="date" name='end' value={endDate} disabled={!(isEditing)} onChange={(e) => handleChange(e,id)} />
             
-            <label>
+            <label className={globalStyles.centerLabel}>
                 Description:
-                <textarea id="jobDescription" name="jobDescription" value={jobDescription} rows="5" cols="50" disabled={!(isEditing)} onChange={(e) => handleChange(e,id)}>
+                <textarea id="jobDescription" name="jobDescription" value={jobDescription} rows="5" cols="50" disabled={!(isEditing)} onInput={(e) => handleChange(e,id)}>
                 </textarea>
 
             </label>
 
             <button type="button" onClick={() => handleRemove(id)} disabled={!(isEditing)}>
                 Remove
-            </button>)
+            </button>
 
             
         </div>
     );
 }); 
 
-export function JobSection({jobItems, setJobItems}){
+export function JobSection({jobItems, setJobItems, mode='input'}){
     const {tempData, isEditing, handleClick, handleChange, handleRemove, handleAdd} = useEditableSection(jobItems,setJobItems);
     console.log("JobSection re-rendered") 
+
+    if(mode === 'display'){
+        return(
+            <div className={[globalStyles.job, globalStyles.display].join(' ')}>
+                <h2>Work Experience</h2>
+                {tempData.map(item => (
+                    <div className={[globalStyles.item, globalStyles.display].join(' ')} key={item.id}>
+                        <p><span className={globalStyles.label}>Job:</span> {item.job}</p>
+                        <p><span className={globalStyles.label}>Start:</span> {item.start}</p>
+                        <p><span className={globalStyles.label}>End:</span> {item.end}</p>
+                        <p><span className={globalStyles.label}>Description:</span> {item.jobDescription}</p>
+                    </div>
+                ))}
+            </div>
+        )};
 
     return(
         <fieldset className='job-section'>
@@ -55,7 +70,10 @@ export function JobSection({jobItems, setJobItems}){
                         jobName={item.job}
                         startDate={item.start}
                         endDate={item.end}
+                        jobDescription={item.jobDescription}
+                        mode='input'
                         isEditing={isEditing}
+
                         handleChange={handleChange}
                         handleRemove={handleRemove}/>
                     
